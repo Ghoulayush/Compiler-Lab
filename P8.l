@@ -1,4 +1,4 @@
-/* Design a DFA in LEX Code that input string of patterns ending with 1 0 over input alphabet */ 
+/* Design a DFA in LEX Code that input string of patterns ending with 1 0 over input alphabet */
 
 %{
 #include <stdio.h>
@@ -10,11 +10,11 @@
 %%
 
 int main() {
-    yylex();
-    return 0;
+  yylex();
+  return 0;
 }
 
 int yywrap() {
-    return 1;
+  return 1;
 }
 \

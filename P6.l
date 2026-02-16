@@ -2,18 +2,26 @@
 
 %{
   #include<stdio.h>
+  extern FILE *yyin,*yyout;
 %}
 
 %%
-"//"[a-zA-Z]+    {printf("Comment: %s\n",yytext);}
-"/*"(.|\n)*"*/" {printf("Comment: %s\n",yytext);}
+"//".* {;}
+"/*"([^*]|\*+[^*/])*"\*/" {;}
+. {fprintf(yyout,"%s",yytext);}
 %%
 
 int main(){
-    yylex();
-    return 0;
+  printf("Input read from file\n");
+  yyin=fopen("in.c","r");
+  yyout=fopen("out.c","w");
+  yylex();
+  printf("Comments removal done!!\nOutput written to file\n");
+  fclose(yyin);
+  fclose(yyout);
+  return 0;
 }
 
 int yywrap(){
-    return 1;
+  return 1;
 }

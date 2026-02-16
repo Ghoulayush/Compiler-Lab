@@ -1,4 +1,4 @@
-/* Design a LEX Code to identify and print integer and float value in a given input pattern */ 
+/* Design a LEX Code to identify and print integer and float value in a given input pattern */
 
 %{
    #include<stdio.h>
@@ -10,7 +10,7 @@
 %%
 
 int main(){
-  printf("enter the input");
+  printf("enter the input:");
   yylex();
   return 0;
 }

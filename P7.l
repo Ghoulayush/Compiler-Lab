@@ -1,4 +1,4 @@
-/* Design a LEX Code to extract all html tags in the HTML file given at run time and store into text file given at run time. */ 
+/* Design a LEX Code to extract all html tags in the HTML file given at run time and store into text file given at run time. */
 
 %{
 #include <stdio.h>
@@ -11,7 +11,7 @@
 %%
 
 int yywrap() {
-    return 1;
+  return 1;
 }
 
 int main() {
