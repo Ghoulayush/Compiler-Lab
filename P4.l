@@ -1,4 +1,4 @@
-/* Design a LEX Code for tokenizing identify and print OPERATORS , SEPERATORS , KEYWORD , IDENTIFIERS */
+/* Design a LEX Code for tokenizing identify and print OPERATORS , SEPARATORS , KEYWORD , IDENTIFIERS */
 
 %{
 #include <stdio.h>

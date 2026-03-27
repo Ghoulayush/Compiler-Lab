@@ -3,6 +3,7 @@
 %{
   #include<stdio.h>
   int lines=0,spaces=0,tabs=0,others=0;
+  extern FILE *yyin,*yyout;
 %}
 
 %%
@@ -14,11 +15,13 @@
 
 int main(){
   printf("enter the input:");
+  yyin = fopen("output.txt","r");
   yylex();
   printf("\n Number of lines=%d\n",lines);
   printf("Number of spaces=%d\n",spaces);
   printf("Number of tabs=%d\n",tabs);
   printf("others=%d\n",others);
+  fclose (yyin);
   return 0;
 }
 

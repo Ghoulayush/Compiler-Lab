@@ -1,0 +1,13 @@
+{
+  "cSpell.words": [
+    "fclose",
+    "fopen",
+    "fprintf",
+    "yyin",
+    "yyleng",
+    "yylex",
+    "yyout",
+    "yytext",
+    "yywrap"
+  ]
+}

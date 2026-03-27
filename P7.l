@@ -6,8 +6,8 @@
 %}
 
 %%
-"<"[^>]+">"    { fprintf(yyout, "%s\n", yytext); }
-.|\n           { ; }
+"<"[^>]+">"    { ; }
+.|\n       { fprintf(yyout, "%s", yytext); }
 %%
 
 int yywrap() {
