@@ -1,0 +1,14 @@
+P11.l
+  h_d3dbf52db58a89 3-6,8,10-37,39-41,43-44,47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "8a754dc7423233d4951ca5a77240b3cfeaf500cb",
+  "prompts": {},
+  "humans": {
+    "h_d3dbf52db58a89": {
+      "author": "Ghoulayush"
+    }
+  }
+}
