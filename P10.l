@@ -1,23 +1,54 @@
 %{
-  #include<stdio.h>
-  extern FILE *yyin;
-  int chars = 0,words = 0,spaces = 0,lines = 0;
+#include <stdio.h>
+extern FILE *yyin, *yyout;
 %}
+%s A B C D E F G DEAD
 %%
-\n              { lines++;}
-" "             { spaces++;}
-\t              { spaces++;}
-[a-zA-Z0-9_]+   { words++; chars += yyleng; }
-.               { chars++; }
+<INITIAL>b BEGIN INITIAL;
+<INITIAL>a BEGIN A;
+<INITIAL>[^ab\n] BEGIN DEAD;
+<INITIAL>\n BEGIN INITIAL; {fprintf(yyout, "Not Accepted\n");}
+<A>b BEGIN F;
+<A>a BEGIN B;
+<A>[^ab\n] BEGIN DEAD;
+<A>\n BEGIN INITIAL; {fprintf(yyout, "Not Accepted\n");}
+<B>b BEGIN D;
+<B>a BEGIN C;
+<B>[^ab\n] BEGIN DEAD;
+<B>\n BEGIN INITIAL; {fprintf(yyout, "Not Accepted\n");}
+<C>b BEGIN D;
+<C>a BEGIN C;
+<C>[^ab\n] BEGIN DEAD;
+<C>\n BEGIN INITIAL; {fprintf(yyout, "Accepted\n");}
+<D>b BEGIN G;
+<D>a BEGIN E;
+<D>[^ab\n] BEGIN DEAD;
+<D>\n BEGIN INITIAL; {fprintf(yyout, "Accepted\n");}
+<E>b BEGIN F;
+<E>a BEGIN B;
+<E>[^ab\n] BEGIN DEAD;
+<E>\n BEGIN INITIAL; {fprintf(yyout, "Accepted\n");}
+<F>b BEGIN G;
+<F>a BEGIN E;
+<F>[^ab\n] BEGIN DEAD;
+<F>\n BEGIN INITIAL; {fprintf(yyout, "Not Accepted\n");}
+<G>b BEGIN INITIAL;
+<G>a BEGIN A;
+<G>[^ab\n] BEGIN DEAD;
+<G>\n BEGIN INITIAL; {fprintf(yyout, "Accepted\n");}
+<DEAD>[^\n] BEGIN DEAD;
+<DEAD>\n BEGIN INITIAL; {fprintf(yyout, "Invalid\n");}
 %%
 int yywrap()
-{    return 1;}
-int main()
 {
-  yyin = fopen("input.txt","r");
-  printf("Input taken from file: input.txt \n");
-  yylex();
-  printf("Total Characters : %d  Total Words : %d\n", chars, words);
-  printf("Total Whitespaces : %d  Total Lines : %d\n", spaces, lines);
-  fclose(yyin);
+return 1;
+}
+int main(){
+yyin = fopen("Input.txt", "r");
+yyout = fopen("Output.txt", "w");
+yylex();
+printf("Result in Output.txt");
+fclose(yyin);
+fclose(yyout);
+return 0;
 }

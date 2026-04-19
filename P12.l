@@ -3,7 +3,7 @@
 #include <stdlib.h>
 %}
 
-% NAME AT DOMAIN DOT TLD DEAD
+%s NAME AT DOMAIN DOT TLD DEAD
 
 %%
 
@@ -31,14 +31,14 @@
 <TLD>.                        { BEGIN(DEAD); }
 
 <DEAD>[^\n\r]*                { /* Stay in dead state until newline */ }
-<DEAD>"\n"|"\r\n"             { printf("Invalid Email\n"); BEGIN(INITIAL); }
+<DEAD>"\n"|"\r\n"             { printf("Invalid Email\n"); BEGIN(INITIAL);}
 
 %%
 
 int main() {
-    printf("Enter email to validate: ");
-    yylex();
-    return 0;
+  printf("Enter email to validate: ");
+  yylex();
+  return 0;
 }
 
 int yywrap() {
