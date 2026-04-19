@@ -1,32 +1,47 @@
 %{
 #include <stdio.h>
+#include <string.h>
+extern FILE *yyin, *yyout;
+char buffer[100];
+int i = 0;
 %}
-
-%x STRING_MIDDLE STRING_FINAL CHAR_MIDDLE CHAR_FINAL
+%x ID INT FLOAT
 %%
-
-<INITIAL>\"                         { BEGIN STRING_MIDDLE; printf("STRING INITIAL: %s\n", yytext); }
-<STRING_MIDDLE>[^\"]                { printf("STRING MIDDLE: %s\n", yytext); }
-<STRING_MIDDLE>\"                   { BEGIN INITIAL; printf("STRING FINAL: %s\n", yytext); }
-
-<INITIAL>'                          { BEGIN CHAR_MIDDLE; printf("CHAR INITIAL: %s\n", yytext); }
-<CHAR_MIDDLE>[^']                   { printf("CHAR MIDDLE: %s\n", yytext); }
-<CHAR_MIDDLE>'                      { BEGIN INITIAL; printf("CHAR FINAL: %s\n", yytext); }
-
-<INITIAL>[0-9]*"."[0-9]+            { printf("FLOAT_LITERAL: %s\n", yytext); }
-<INITIAL>[0-9]+                     { printf("INT_LITERAL: %s\n", yytext); }
-<INITIAL>[a-zA-Z_][a-zA-Z0-9_]*     { printf("IDENTIFIER: %s\n", yytext); }
-
-<INITIAL>[ \t\n]+                   ;
-<INITIAL>.                          { printf("UNKNOWN: %s\n", yytext); }
+<INITIAL>[a-zA-Z_] { i=0; buffer[i++]=yytext[0]; BEGIN(ID); }
+<INITIAL>[0-9] { i=0; buffer[i++]=yytext[0]; BEGIN(INT); }
+<INITIAL>[ \t\n] { }
+<ID>[a-zA-Z0-9_] { buffer[i++]=yytext[0]; }
+<ID>[^a-zA-Z0-9_] {
+char c = yytext[0]; /* store safely */
+buffer[i]='\0';
+fprintf(yyout,"Identifier: %s\n",buffer);
+BEGIN(INITIAL);
+unput(c);
+}
+<INT>[0-9] { buffer[i++]=yytext[0]; }
+<INT>\. { buffer[i++]=yytext[0]; BEGIN(FLOAT); }
+<INT>[^0-9\.] {
+char c = yytext[0];
+buffer[i]='\0';
+fprintf(yyout,"Integer: %s\n",buffer);
+BEGIN(INITIAL);
+unput(c);
+}
+<FLOAT>[0-9] { buffer[i++]=yytext[0]; }
+<FLOAT>[^0-9] {
+char c = yytext[0];
+buffer[i]='\0';
+fprintf(yyout,"Float: %s\n",buffer);
+BEGIN(INITIAL);
+unput(c);
+}
 %%
-
-int main() {
-  printf("Write:\n");
+int main(){
+  yyin = fopen("Input.txt", "r");
+  yyout = fopen("Output.txt", "w");
   yylex();
+  fclose(yyin);
+  fclose(yyout);
   return 0;
 }
-
-int yywrap() {
-  return 1;
-}
+int yywrap() { return 1; }
