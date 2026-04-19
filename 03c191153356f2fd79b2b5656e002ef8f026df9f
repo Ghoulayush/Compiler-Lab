@@ -1,0 +1,18 @@
+P9.l
+  h_d3dbf52db58a89 3,5,7-22,24-31,33
+P10.l
+  h_d3dbf52db58a89 3,5,7-40,44,46-53
+Input.txt
+  h_d3dbf52db58a89 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.0",
+  "base_commit_sha": "03c191153356f2fd79b2b5656e002ef8f026df9f",
+  "prompts": {},
+  "humans": {
+    "h_d3dbf52db58a89": {
+      "author": "Ghoulayush"
+    }
+  }
+}
