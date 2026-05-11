@@ -1,4 +1,3 @@
-Not Accepted
-Accepted
-Accepted
-Accepted
+Result: 8
+Result: 20
+Result: 23

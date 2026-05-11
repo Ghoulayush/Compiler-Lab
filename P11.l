@@ -1,47 +1,41 @@
 %{
 #include <stdio.h>
-#include <string.h>
-extern FILE *yyin, *yyout;
-char buffer[100];
-int i = 0;
 %}
-%x ID INT FLOAT
+%s A B C D Y Z
 %%
-<INITIAL>[a-zA-Z_] { i=0; buffer[i++]=yytext[0]; BEGIN(ID); }
-<INITIAL>[0-9] { i=0; buffer[i++]=yytext[0]; BEGIN(INT); }
-<INITIAL>[ \t\n] { }
-<ID>[a-zA-Z0-9_] { buffer[i++]=yytext[0]; }
-<ID>[^a-zA-Z0-9_] {
-char c = yytext[0]; /* store safely */
-buffer[i]='\0';
-fprintf(yyout,"Identifier: %s\n",buffer);
-BEGIN(INITIAL);
-unput(c);
-}
-<INT>[0-9] { buffer[i++]=yytext[0]; }
-<INT>\. { buffer[i++]=yytext[0]; BEGIN(FLOAT); }
-<INT>[^0-9\.] {
-char c = yytext[0];
-buffer[i]='\0';
-fprintf(yyout,"Integer: %s\n",buffer);
-BEGIN(INITIAL);
-unput(c);
-}
-<FLOAT>[0-9] { buffer[i++]=yytext[0]; }
-<FLOAT>[^0-9] {
-char c = yytext[0];
-buffer[i]='\0';
-fprintf(yyout,"Float: %s\n",buffer);
-BEGIN(INITIAL);
-unput(c);
-}
+<INITIAL>[A-Za-z_] BEGIN B;
+<INITIAL>[0-9] BEGIN A;
+<INITIAL>[.] BEGIN Y;
+<INITIAL>[^A-Za-z0-9_.\n] BEGIN Z;
+<INITIAL>\n BEGIN INITIAL; printf("Not accepted\n");
+<A>[.] BEGIN C;
+<A>[0-9] BEGIN A;
+<A>[A-Za-z_] BEGIN Y;
+<A>[^A-Za-z0-9_.\n] BEGIN Z;
+<A>\n BEGIN INITIAL; printf("Integer\n");
+<B>[A-Za-z_] BEGIN B;
+<B>[0-9] BEGIN B;
+<B>[.] BEGIN Y;
+<B>[^A-Za-z0-9_.\n] BEGIN Z;
+<B>\n BEGIN INITIAL; printf("Identifier\n");
+<C>[0-9] BEGIN D;
+<C>[.] BEGIN Y;
+<C>[A-Za-z_] BEGIN Y;
+<C>[^A-Za-z0-9_.\n] BEGIN Z;
+<C>\n BEGIN INITIAL; printf("Not Accepted\n");
+<D>[0-9] BEGIN D;
+<D>[.] BEGIN Y;
+<D>[A-Za-z_] BEGIN Y;
+<D>[^A-Za-z0-9_.\n] BEGIN Z;
+<D>\n BEGIN INITIAL; printf("Float\n");
+<Y>[A-Za-z0-9_.] BEGIN Y;
+<Y>[^A-Za-z0-9_.\n] BEGIN Z;
+<Y>\n BEGIN INITIAL; printf("Not Accepted\n");
+<Z>[^\n] BEGIN Z;
+<Z>\n BEGIN INITIAL; printf("Invalid Input\n");
 %%
+int yywrap(){ return 1; }
 int main(){
-  yyin = fopen("Input.txt", "r");
-  yyout = fopen("Output.txt", "w");
+  printf("Enter the char [A-Za-z0-9_.] only:\n");
   yylex();
-  fclose(yyin);
-  fclose(yyout);
-  return 0;
 }
-int yywrap() { return 1; }
